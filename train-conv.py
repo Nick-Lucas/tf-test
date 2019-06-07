@@ -1,5 +1,6 @@
 # %%
 
+import os
 import tensorflow as tf
 import numpy as np
 
@@ -22,7 +23,14 @@ print(x_test.shape[0], 'test samples')
 y_train = tf.keras.utils.to_categorical(y_train, num_classes)
 y_test = tf.keras.utils.to_categorical(y_test, num_classes)
 
+# Setup session
+if os.environ.get("TF_GPU_GROWTH", False):
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+    tf.keras.backend.set_session(sess)
 
+# Run
 model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, kernel_size=(3, 3),
                            activation='relu',
